@@ -167,6 +167,10 @@ require_once("../filterprocessing.php");
                    ".$event['a_client_port']."
                    </td>";
 
+                   print "<td>
+                   <a href=\"events.php?esrc=".headerprintnobr($event['a_client_ip_cc'])."\" title=\"Click to filter by this CC\"> <img src=\"images/flags/png/".strtolower(headerprintnobr($event['a_client_ip_cc'])).".png\"". headerprintnobr($event['a_client_ip_cc']) ."\" style=\"border-style: none\"> ". headerprintnobr($event['a_client_ip_cc']) ."</a>
+                   </td>";
+
                    if ($event['b_host'] != '') {
                       print "<td><div class=\"wordwrap\">Hostname: <a href=\"events.php?web_Hostname=".headerprintnobr($event['b_host'])."\" title=\"Click to filter by this Web Hostname\">".headerprintnobr(getWebHostName($event['b_host']))."</a>, ";
                    } else {
@@ -181,6 +185,11 @@ require_once("../filterprocessing.php");
                    print "<br />Status Code: <a href=\"events.php?http_Status=".headerprintnobr($event['f_status'])."\" title=\"Click to filter by this HTTP Status\">".headerprintnobr($event['f_status'])."</a> ";
                    if ($event['f_msg'] != '') {
                       print "(<i>".headerprintnobr($event['f_msg'])."</i>)</div></td>";
+                   }
+                   print "<td>";
+                   if ($event['b_host'] != '') {
+                      $servername = getServerName(getWebHostName($event['b_host']));
+                      print "".headerprintnobr($servername)." <br/>";
                    }
                    print "<td>";
                    print "<div class=\"wordwrap\">";
