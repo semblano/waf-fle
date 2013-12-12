@@ -598,6 +598,14 @@ function statsTopASN()
     return $statsTopSources;
 }
 
+function getServerName ($addr) {
+    try {
+        $hostname = gethostbyaddr ($addr);
+    } catch (Excpetion $e) {
+        $hostname = gethostbyname ($addr);
+    }
+    return $hostname;
+}
 
 function array_multimerge ($array1, $array2)
 {
@@ -1564,7 +1572,7 @@ function eventFilter($offset, $maxnumber, $eventCount)
     // Call superFilter to filter and get the events
     $eventCount = superFilter($selector, $trailer, $filterType, TRUE);
     if ($eventCount > 0) {
-        $sqlFetchEvents = 'SELECT events.event_id, events.sensor_id, events.a_timestamp, events.a_uniqid, INET_NTOA(events.a_client_ip) AS a_client_ip,  events.a_client_port, INET_NTOA(events.a_server_ip) AS a_server_ip, events.a_server_port,  events.b_method, events.b_path, events.b_path_parameter, events.b_protocol, events.b_host, events.f_protocol, events.f_status, events.f_msg, events.f_content_length, events.f_connection, events.f_content_type, events.h_severity, events.h_Interception_phase, events.h_action_status, events.h_action_status_msg FROM list_events, events WHERE events.event_id = list_events.event_id';
+        $sqlFetchEvents = 'SELECT events.event_id, events.sensor_id, events.a_timestamp, events.a_uniqid, INET_NTOA(events.a_client_ip) AS a_client_ip,  events.a_client_port, events.a_client_ip_cc, INET_NTOA(events.a_server_ip) AS a_server_ip, events.a_server_port,  events.b_method, events.b_path, events.b_path_parameter, events.b_protocol, events.b_host, events.f_protocol, events.f_status, events.f_msg, events.f_content_length, events.f_connection, events.f_content_type, events.h_severity, events.h_Interception_phase, events.h_action_status, events.h_action_status_msg FROM list_events, events WHERE events.event_id = list_events.event_id';
 
         if ($DEBUG) {
             $debugInfo[__FUNCTION__][$debugCount]['query'] = $sqlFetchEvents;
@@ -3987,7 +3995,7 @@ function logoff()
         $starttime = microtime(true);
     }
 
-    // last request was more than $SESSION_TIMEOUT minates ago
+    // last request was more than $SESSION_TIMEOUT minutes ago
     $_SESSION = array();
 
     // If it's desired to kill the session, also delete the session cookie.
